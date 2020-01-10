@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TJX Xstore Functional Bot</title>
+ </head>
+  <body bgcolor = "#FFFFFF">
+    <h1>TJX Xstore Functional BOT</h1>
+  <div>
+    <div id="chatbox">
+     <p class="botText"><span>Hi! I'm TJX Xstore Chat bot. How I can help you!</span></p>
+    </div>
+    <div id="userInput">
+      <input id="textInput" type="text" name="msg" placeholder="Type your query here....">
+      <input id="buttonInput" type="submit" value="Submit">
+    </div>
+    <script>
+        function getBotResponse() {
+          var rawText = $("#textInput").val();
+		  var avatar = '<img src="/static/avatarP.jpg" alt="Avatar" class="avatar">'
+		  var avatarBot = '<img src="/static/bot.png" alt="AvatarBot" class="avatarBot">'
+          var userHtml = '<p class="userText"><span>' + rawText + '</span>' +  avatar+ '</p>'   ; //add background color and font n all to userinput before adding it to viewport
+          $("#textInput").val(""); //show placeholder if commented will show the previous quest by default
+          $("#chatbox").append(userHtml);//display the question in viewport, if removed, you only see the answer not the user input
+          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          $.get("/get", { msg: rawText }).done(function(data) {
+            var botHtml = '<p class="botText">' + avatarBot+ '<span>' + data + '</span></p>'; //add background color and font n all to bot answer before adding it to viewport
+            $("#chatbox").append(botHtml);//display the bot answer in viewport
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          });
+        }
+        $("#textInput").keypress(function(e) {
+            if(e.which == 13) {
+                getBotResponse();
+            }
+        });
+        $("#buttonInput").click(function() {
+          getBotResponse();
+        })
+      </script>
+  </div>
+  </body>
+</html>
